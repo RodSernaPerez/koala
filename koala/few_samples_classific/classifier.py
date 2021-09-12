@@ -158,7 +158,7 @@ class SimilarityClassifier(Classifier):
             return self.dim_reduction_model.n_components
 
     def create_model(self):
-        if self.type_model == "logistc":
+        if self.type_model == "logistic":
             return self._create_similarity_model_logistic()
         elif self.type_model == "dense":
             return self._create_similarity_model_dense()
@@ -201,13 +201,17 @@ class SimilarityClassifier(Classifier):
         model.compile("adam", "mse", metrics=["accuracy"])
         return model
 
+    _FIT_PARAMS = {"dense": {"epochs": 1,
+                             "verbose": 0},
+                   "logistic": {}}
+
     def fit(self, dict_vectors_per_value: Dict):
         self.labels = list(dict_vectors_per_value.keys())
         self.model = self.create_model()
         self.support_vectors = self.create_extended_dataset(dict_vectors_per_value)
         train_data = zip(*self.create_dataset_similarity(self.support_vectors))
         x, y = train_data
-        self.model.fit(np.asarray(x), np.asarray(y), epochs=1, verbose=0)
+        self.model.fit(np.asarray(x), np.asarray(y), **self._FIT_PARAMS[self.type_model])
 
     def classify_vector(self, vector: np.array):
         vector = self.reduce_dim(vector)

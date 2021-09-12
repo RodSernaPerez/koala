@@ -1,0 +1,3 @@
+gensim==4.0
+spacy_spanish_lemmatizer
+text_distance
