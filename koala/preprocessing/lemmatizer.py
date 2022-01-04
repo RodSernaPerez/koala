@@ -28,7 +28,3 @@ def lemmatize_text(text):
     # return spanish_stanza_lemitizer(text)
     lemmas = spanish_spacy_lemitizer(text)
     return lemmas if len(text) > 1 else lemmas[0]
-
-
-
-
